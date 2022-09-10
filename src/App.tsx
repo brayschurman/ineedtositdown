@@ -12,19 +12,22 @@ function App() {
 
   // const [marker, setMarker] = useState({});
 
-  const [lat, setLat] = useState(43.659457);
-  const [lon, setLon] = useState(-79.392073);
+  const [lat, setLat] = useState(0);
+  const [lon, setLon] = useState(0);
+
+  const [centerLat, setCenterLat] = useState(43.659457);
+  const [centerLon, setCenterLon] = useState(-79.392073);
 
   // useEffect(() => {
   //   console.log(marker);
   // }, [marker])
 
   const plotPosition = (position: any) => {
-    setLat(position.coords.latitude);
-    setLon(position.coords.longitude);
+    setCenterLat(position.coords.latitude);
+    setCenterLon(position.coords.longitude);
   }
 
-  // navigator.geolocation.getCurrentPosition(plotPosition);
+  navigator.geolocation.getCurrentPosition(plotPosition);
 
   if (!bench_data) {
     console.log("No bench data to display.");
@@ -33,15 +36,16 @@ function App() {
   const randomSpot = () => {
     const item = bench_data.features[Math.floor(Math.random() * bench_data.features.length)];
     console.log(item);
-    // setMarker({ lat: item.geometry.coordinates[1], lon: item.geometry.coordinates[0] });
-    // setMarker({ coords: [item.geometry.coordinates[0], item.geometry.coordinates[1]] })
     setLon(item.geometry.coordinates[0]);
     setLat(item.geometry.coordinates[1]);
+
+    setCenterLon(item.geometry.coordinates[0]);
+    setCenterLat(item.geometry.coordinates[1]);
   }
 
   return (
     <>
-      <MapContainer center={[lat, lon]} zoom={14} scrollWheelZoom={false}>
+      <MapContainer center={[centerLat, centerLon]} zoom={14} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -52,7 +56,6 @@ function App() {
           </Popup>
         </Marker>
       </MapContainer>
-      alert(marker);
       <button onClick={randomSpot}>Random</button>
     </>
   );
