@@ -30,7 +30,7 @@ function App() {
   navigator.geolocation.getCurrentPosition(plotPosition);
 
   if (!bench_data) {
-    console.log("No bench data to display.");
+    console.log("No data to display.");
   }
 
   const randomSpot = () => {
